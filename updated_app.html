@@ -1,4 +1,3 @@
-  <div style="position:fixed;left:24px;bottom:24px;z-index:1;">
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -506,7 +505,47 @@ body{background:var(--bg);color:var(--txt);font-family:Rajdhani,sans-serif;overf
   <div class="named-bar">
     <div class="named-bar-left">
       <div class="named-bar-header">
-        <span class="cr-dot" style="background:var(--pur);box-shadow:0 0 7px var(--pur);flex-shrink:0">
+        <span class="cr-dot" style=".bottom-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin: 16px;
+  flex-shrink: 0;
+}
+.named-bar {
+  flex: 1;
+  max-width: 40%; /* Make it narrower so it wraps and fits on the left */
+  background: rgba(4,6,22,.88);
+  border: 1px solid rgba(155,111,212,.3);
+  border-radius: 3px;
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  min-height: 120px; /* Allow it to be taller for wrapping */
+  max-height: none; /* Remove max-height to let it expand */
+}
+.named-bar-left {
+  width: 100%; /* Let it take full width of the bar for wrapping */
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.named-bar-configs {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap; /* Allow configs to wrap */
+  gap: 8px;
+  align-content: flex-start;
+  overflow-y: auto;
+  width: 100%;
+}
+.card-container {
+  flex-shrink: 0;
+  width: 30%; /* Fixed width on the right */
+  overflow: hidden;
+}background:var(--pur);box-shadow:0 0 7px var(--pur);flex-shrink:0"></span>
         <span class="named-bar-title">NAMED CONFIGURATIONS</span>
         <button class="cr-add-btn" style="padding:3px 10px;font-size:.68rem;border-style:solid;margin-left:8px" onclick="addObs()">+ NAME</button>
       </div>
@@ -547,24 +586,23 @@ body{background:var(--bg);color:var(--txt);font-family:Rajdhani,sans-serif;overf
           style="width: 100%; height: 350px; display: block; object-fit: contain;">
       <!-- Cosmic Exodus GIF below flashy man gif, far right -->
       <div style="display:flex;justify-content:flex-end;width:100%;margin-top:18px;">
-        <img id="cosmic-exodus-gif" src="cosmic exodus.gif" alt="Cosmic Exodus" style="width:320px;height:auto;display:block;border-radius:8px;box-shadow:0 0 18px rgba(155,111,212,.18);margin-right:140px;position:relative;z-index:10000;">
+        <img id="cosmic-exodus-gif" src="cosmic exodus.gif" alt="Cosmic Exodus" style="width:290px;height:auto;display:block;border-radius:8px;box-shadow:0 0 18px rgba(155,111,212,.18);margin-right:145px;position:relative;z-index:10000;">
       </div>
   </div>
-</div>
 
-    <div style="padding:12px 28px;border-top:1px solid rgba(80,60,160,.2);display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-shrink:0">
-      <button class="cr-add-btn" style="border-style:solid;padding:8px 22px;font-size:.8rem" onclick="resetCreation()">RESET</button>
-      <button class="launch-btn" style="display:block;width:auto;margin:0;padding:8px 28px" onclick="runSim()">&#9654;  RUN SIMULATION</button>
-    </div>
-  
-    <div class="p-toast" id="p-toast"></div>
-      <!-- Cosmic Infinite GIF bottom-left of creation tab -->
-      <div style="position:fixed;left:24px;bottom:24px;z-index:999;">
-        <img id="cosmic-infinite-gif" src="cosmic_infinite.gif" alt="Cosmic Infinite" style="width:770px;height:250px;display:block;border-radius:8px;box-shadow:0 0 18px rgba(155,111,212,.18);object-fit:fill;margin-left:10px;">
-      </div>
-    <!-- Cosmic Exodus GIF centered at bottom -->
-    <div style="position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:999;text-align:center;">
+  <div style="position:absolute;bottom:24px;right:28px;display:flex;align-items:center;gap:12px;z-index:100">
+    <button class="cr-add-btn" style="border-style:solid;padding:8px 22px;font-size:.8rem" onclick="resetCreation()">RESET</button>
+    <button class="launch-btn" style="display:block;width:auto;margin:0;padding:8px 28px" onclick="runSim()">&#9654;  RUN SIMULATION</button>
   </div>
+
+  <!-- Cosmic Infinite GIF bottom-left (creation tab only) -->
+  <div style="position:absolute;left:24px;bottom:24px;z-index:99;pointer-events:none;">
+    <img id="cosmic-infinite-gif" src="cosmic_infinite.gif" alt="Cosmic Infinite" style="width:770px;height:245px;display:block;border-radius:8px;box-shadow:0 0 18px rgba(155,111,212,.18);object-fit:fill;margin-left:10px;">
+  </div>
+
+  <div class="p-toast" id="p-toast"></div>
+</div>
+</div>
 
 <!-- SIMULATION OVERLAY -->
 <div id="sim-overlay">
@@ -655,7 +693,7 @@ const SIMS = [
    ]},
   {id:'deleuze',name:'Difference & Repetition',thinker:'Gilles Deleuze',
    color:[160,220,180],
-   tags:{ph:['deleuze'],meta:['process']},
+   tags:{ph:['deleuze'],meta:['process','relational']},
    metaDesc:'Deleuze treats difference and becoming as metaphysically primary, conceiving reality as a field of virtual multiplicities that actualize through processes of differentiation and repetition.',
    terminal:[
     ['lbl','// DIFFERENCE & REPETITION -- Deleuze'],['dim','--------------------------------------'],
@@ -774,7 +812,7 @@ function renderCards(){
     grid.appendChild(card);
   }
 }
-
+ 
 function selectCard(id){
   selectedSim=id;
   document.querySelectorAll('.sim-card').forEach(c=>c.classList.remove('selected'));
@@ -783,22 +821,23 @@ function selectCard(id){
   const sim=SIMS.find(s=>s.id===id);
   if(sim) renderTerminal(sim);
 }
-
+ 
 function renderTerminal(sim){
   const body=document.getElementById('terminal-body');
-  const title = `${sim.name} — ${sim.thinker}`;
-  const meta = sim.metaDesc || 'No description available.';
-  let html = `<div class="t-header">// METAPHYSICAL REGISTER -- READ ONLY<\/div>`;
-  html += `<span class="t-line t-lbl">${title}<\/span><br>`;
-  html += `<span class="t-line t-dim">${meta}<\/span><br>`;
-  html += `<span class="cursor"><\/span>`;
-  body.innerHTML = html;
+  const [r,g,b]=sim.color;
+  let html=`<div class="t-header">// METAPHYSICAL REGISTER -- READ ONLY<\/div>`;
+  if(sim.metaDesc){
+    html+=`<span class="t-line t-dim" style="display:block;margin:10px 0;line-height:1.6;color:rgba(155,111,212,.7);font-style:italic">${sim.metaDesc}<\/span>`;
+  }
+  html+=`<span class="cursor"><\/span>`;
+  body.innerHTML=html;
 }
-
+ 
 function launchSim(id){
   const idx=SIMS.findIndex(s=>s.id===id);
   startSimulation(idx);
 }
+ 
 
 // ===============================================================
 // ABOUT
